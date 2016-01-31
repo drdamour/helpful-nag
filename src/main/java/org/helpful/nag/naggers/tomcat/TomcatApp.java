@@ -1,4 +1,4 @@
-package org.helpful.nag.nags.tomcat;
+package org.helpful.nag.naggers.tomcat;
 
 import lombok.ToString;
 

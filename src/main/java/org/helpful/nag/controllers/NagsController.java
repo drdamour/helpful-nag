@@ -1,7 +1,7 @@
 package org.helpful.nag.controllers;
 
-import org.helpful.nag.nags.Nag;
-import org.helpful.nag.nags.tomcat.AppCompareNagger;
+import org.helpful.nag.naggers.Nag;
+import org.helpful.nag.naggers.tomcat.AppCompareNagger;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -14,10 +14,12 @@ import java.util.stream.Collectors;
 @RequestMapping("/nags")
 public class NagsController {
 
+    final AppCompareNagger appCompareNagger = new AppCompareNagger();
+
     @RequestMapping
     public List<Nag> nags() throws IOException {
         return
-            AppCompareNagger.findNags().collect(Collectors.toList());
+            appCompareNagger.findNags().collect(Collectors.toList());
 
     }
 }

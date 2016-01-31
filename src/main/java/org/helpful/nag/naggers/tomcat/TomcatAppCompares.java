@@ -1,11 +1,12 @@
-package org.helpful.nag.nags.tomcat;
+package org.helpful.nag.naggers.tomcat;
 
-import org.helpful.nag.nags.Nag;
+import org.helpful.nag.naggers.Nag;
+import org.helpful.nag.naggers.tomcat.nags.MismatchedVersionsNag;
+import org.helpful.nag.naggers.tomcat.nags.MissingAppNag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 import java.util.stream.Stream;
 
@@ -23,7 +24,7 @@ public class TomcatAppCompares {
     }
 
     public Stream<Nag> findNags(){
-        LOG.info("finding nags for candidate {} and authority {}", candidate, authority);
+        LOG.info("finding naggers for candidate {} and authority {}", candidate, authority);
 
         //I wanted this to be a stream...but there's no yield
         //and no concat, so it gets really messy..java sucks
@@ -32,6 +33,10 @@ public class TomcatAppCompares {
         ArrayList<Nag> nags = new ArrayList<>();
         if(authority == null){
             nags.add(new MissingAppNag(candidate));
+        } else {
+            if (candidate.getVersion().equalsIgnoreCase(authority.getVersion())) {
+                nags.add(new MismatchedVersionsNag(candidate, authority));
+            }
         }
         return nags.stream();
 

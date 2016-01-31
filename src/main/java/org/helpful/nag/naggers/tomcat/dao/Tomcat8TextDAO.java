@@ -1,6 +1,7 @@
-package org.helpful.nag.nags.tomcat.dao;
+package org.helpful.nag.naggers.tomcat.dao;
 
-import org.helpful.nag.nags.tomcat.TomcatApp;
+import com.typesafe.config.Config;
+import org.helpful.nag.naggers.tomcat.TomcatApp;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.Base64Utils;
@@ -20,9 +21,14 @@ import java.util.stream.Stream;
 public class Tomcat8TextDAO {
     private final static Logger LOG = LoggerFactory.getLogger(Tomcat8TextDAO.class);
 
-    public static Stream<TomcatApp> findApps(String host) throws IOException {
+    public static Stream<TomcatApp> findApps(Config config) throws IOException {
+        String host = config.getString("host");
+
+        String user = config.getString("user");
+        String pass = config.getString("pass");
+
         java.net.URLConnection c = new URL(host + "/manager/text/list").openConnection(new Proxy(Proxy.Type.HTTP, new InetSocketAddress("localhost", 8888)));
-        c.addRequestProperty("Authorization", "Basic " + Base64Utils.encodeToString("manager:letmein".getBytes()));
+        c.addRequestProperty("Authorization", "Basic " + Base64Utils.encodeToString((user + ":" + pass).getBytes()));
 
         BufferedReader in = new BufferedReader(
             new InputStreamReader(

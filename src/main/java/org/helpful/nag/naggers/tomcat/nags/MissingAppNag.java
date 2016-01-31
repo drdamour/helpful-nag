@@ -1,19 +1,29 @@
-package org.helpful.nag.nags.tomcat;
+package org.helpful.nag.naggers.tomcat.nags;
 
-import org.helpful.nag.nags.Nag;
+import org.helpful.nag.naggers.Nag;
+import org.helpful.nag.naggers.NagBase;
+import org.helpful.nag.naggers.NagTag;
+import org.helpful.nag.naggers.tomcat.TomcatApp;
 
 import java.util.Objects;
 
-public class MissingAppNag implements Nag {
+public class MissingAppNag extends NagBase implements Nag {
 
     final private TomcatApp app;
 
+
     public MissingAppNag(TomcatApp app){
+        super(3);
         Objects.requireNonNull(app);
 
         this.app = app;
 
+        this.tags.add(new NagTag(NagTag.TAG_NAME_CATEGORY, "tomcat"));
+        this.tags.add(new NagTag(NagTag.TAG_NAME_APP, app.getName()));
+        this.tags.add(new NagTag(NagTag.TAG_NAME_HOST, app.getHost()));
+
     }
+
 
 
     @Override
